@@ -10,7 +10,7 @@ describe('Los estudiantes under monkeys', function () {
         cy.visit('https://losestudiantes.co');
         cy.contains('Cerrar').click();
         cy.wait(1000);
-        randomEvent(10);
+        randomEvent(50);
     })
 })
 
@@ -53,45 +53,46 @@ function randomEvent(monkeys) {
 
     function randomWord() {
         var letras = 'abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789';
-        letras = letras.split('');
-        palabra='';
+        var letras = letras.split('');
+        var palabra = '';
         for (let i = 0; i < 10; i++) {
-            palabra += letras[Math.floor(Math.random() * letras.length)];     
+            palabra += letras[Math.floor(Math.random() * letras.length)];
         }
-        return palabra;      
+        return palabra;
     };
 
     var monkeys = monkeys;
     if (monkeys > 0) {
 
         var obj = getRandomTypeObject();
-        cy.log('ahora salio: '+ obj)
+        cy.log('ahora salio: ' + obj)
 
-        cy.get(obj).then($objects => {
-            var randomObject = $objects.get(getRandomInt(0, $objects.length));
-            cy.log(randomObject)
-            if (!Cypress.dom.isHidden(randomObject)) {
-                switch (String(obj)) {
-                    case 'a':
-                        cy.wrap(randomObject).click({ force: true });
-                        break;
-                    case 'input':
-                        cy.wrap(randomObject).click({ force: true }).type(randomWord(),{force: true});;
-                        break;
-                    case 'select':
-                        cy.wrap(randomObject).children('option').eq(0).then(e => {cy.wrap(randomObject).select(e.val(), {force: true});});
-                        break;
-                    case 'button':
-                        cy.wrap(randomObject).click({ force: true });
-                        break;
-                    default:
-                        break;
-                }
-
+        cy.get("body").then($body => {
+            if ($body.find(obj).length > 0) {   //Evalua si existe ese tipo de objeto en el body
+                cy.get(obj).then($objects => {
+                    var randomObject = $objects.get(getRandomInt(0, $objects.length));
+                    cy.log(randomObject)
+                    if (!Cypress.dom.isHidden(randomObject)) {
+                        switch (String(obj)) {
+                            case 'a':
+                                cy.wrap(randomObject).click({ force: true });
+                                break;
+                            case 'input':
+                                cy.wrap(randomObject).click({ force: true }).type(randomWord(), { force: true });;
+                                break;
+                            case 'select':
+                                cy.wrap(randomObject).children('option').eq(getRandomInt(0, randomObject.options.length)).then(e => { cy.wrap(randomObject).select(e.val(), { force: true }); });
+                                break;
+                            case 'button':
+                                cy.wrap(randomObject).click({ force: true });
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                })
             }
-
-
-        })
+        });
 
         monkeys = monkeys - 1;
         cy.wait(1000);
