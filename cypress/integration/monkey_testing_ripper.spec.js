@@ -16,7 +16,6 @@ describe('Los estudiantes under monkeys', function () {
 
 
 
-
 function randomClick(monkeysLeft) {
 
     function getRandomInt(min, max) {
@@ -50,7 +49,17 @@ function randomEvent(monkeys) {
     function getRandomTypeObject() {
         var arr = ["a", "input", "select", "button"]
         return arr[Math.floor(Math.random() * arr.length)];
-    }
+    };
+
+    function randomWord() {
+        var letras = 'abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789';
+        letras = letras.split('');
+        palabra='';
+        for (let i = 0; i < 10; i++) {
+            palabra += letras[Math.floor(Math.random() * letras.length)];     
+        }
+        return palabra;      
+    };
 
     var monkeys = monkeys;
     if (monkeys > 0) {
@@ -67,7 +76,7 @@ function randomEvent(monkeys) {
                         cy.wrap(randomObject).click({ force: true });
                         break;
                     case 'input':
-                        cy.wrap(randomObject).click({ force: true }).type('Hola',{force: true});;
+                        cy.wrap(randomObject).click({ force: true }).type(randomWord(),{force: true});;
                         break;
                     case 'select':
                         cy.wrap(randomObject).children('option').eq(0).then(e => {cy.wrap(randomObject).select(e.val(), {force: true});});
