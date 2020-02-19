@@ -3,14 +3,14 @@ describe('Los estudiantes under monkeys', function () {
         cy.visit('https://losestudiantes.co');
         cy.contains('Cerrar').click();
         cy.wait(1000);
-        randomClick(0);
+        randomClick(10);
     })
 
-    it.only('Usando funcion RandomEvent', function () {
+    it('Usando funcion RandomEvent', function () {
         cy.visit('https://losestudiantes.co');
         cy.contains('Cerrar').click();
         cy.wait(1000);
-        randomEvent(50);
+        randomEvent(10);
     })
 })
 
